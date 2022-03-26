@@ -1,41 +1,30 @@
 import express from 'express';
 import 'express-async-errors';
+import * as remoteController from '../controller/remote.js';
 
 
 const router = express.Router();
 /////////////////////////////
 //  tempremote controller  //
 //  Get status
-router.get('/tempcontroller' , (req, res, next) => {
-
-});
+router.get('/tempcontroller' , remoteController.tempGetStatus);
 //  Update stauts
-router.put('/tempcontroller' , (req, res, next) => {
-
-});
+router.post('/tempcontroller' , remoteController.tempControl);
 /////////////////////////////
 
 /////////////////////////////
 //  light controller       //
 //  Get status
-router.get('/light' , (req, res, next) => {
-
-});
+router.get('/light' , remoteController.lightGetStatus);
 //  Update stauts
-router.put('/light' , (req, res ,next) => {
-
-});
+router.put('/light' , remoteController.lightGetStatus);
 /////////////////////////////
 
 /////////////////////////////
 //curtain controller       //
 //  Get status
-router.get('/curtain' , (req, res, next) => {
-
-});
+router.get('/curtain' , remoteController.curtainGetStatus);
 //  Update stauts
-router.put('/curtain' , (req, res, next) => {
-
-});
+router.put('/curtain' , remoteController.curtainControl);
 /////////////////////////////
 export default router;
