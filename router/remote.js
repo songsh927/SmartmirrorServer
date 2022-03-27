@@ -4,6 +4,8 @@ import * as remoteController from '../controller/remote.js';
 
 
 const router = express.Router();
+
+router.get('/', remoteController.getStatus);
 /////////////////////////////
 //  tempremote controller  //
 //  Get status
@@ -15,16 +17,16 @@ router.post('/tempcontroller' , remoteController.tempControl);
 /////////////////////////////
 //  light controller       //
 //  Get status
-router.get('/light' , remoteController.lightGetStatus);
+router.get('/lightcontroller' , remoteController.lightGetStatus);
 //  Update stauts
-router.put('/light' , remoteController.lightGetStatus);
+router.post('/lightcontroller' , remoteController.lightControl);
 /////////////////////////////
 
 /////////////////////////////
 //curtain controller       //
 //  Get status
-router.get('/curtain' , remoteController.curtainGetStatus);
+router.get('/curtaincontroller' , remoteController.curtainGetStatus);
 //  Update stauts
-router.put('/curtain' , remoteController.curtainControl);
+router.post('/curtaincontroller' , remoteController.curtainControl);
 /////////////////////////////
 export default router;

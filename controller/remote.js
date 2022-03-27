@@ -2,12 +2,14 @@ import requestApi from 'request';
 //get status
 //update status
 
-var tempStatus = 'off';
-var lightStatus = 'off';
-var curtainStatus = 'off';
+var statusData = {
+    "lightStatus" : "on",
+    "curtainStatus" : "off",
+    "tempStatus" : "off",
+}
 
 export function tempGetStatus(req, res, next){
-    return res.status(200).json(tempStatus);
+    return res.status(200).json(statusData.tempStatus);
 }
 export async function tempControl(req, res){
     const {ctrl} = req.body;
@@ -16,29 +18,36 @@ export async function tempControl(req, res){
         return res.status(200).json('asdf')
     }
     //requestApi.post
-    tempStatus = ctrl;
-    return res.status(200).json(tempStatus);
+    statusData.tempStatus = ctrl;
+    return res.status(200).json(statusData.tempStatus);
 }
 
 export async function lightGetStatus(req, res){
-    return res.status(200).json(lightStatus);
+    return res.status(200).json(statusData.lightStatus);
 }
 export async function lightControl(req, res){
+    const {ctrl} = req.body;
+    if(statusData.lightStatus == ctrl){
+        return res.status(200).json('asdf')
+    }
+    statusData.lightStatus = ctrl;
+    return res.status(200).json(statusData.lightStatus);
     
 }
 
 export async function curtainGetStatus(req, res){
-    return res.status(200).json(curtainStatus);
+    return res.status(200).json(statusData.curtainStatus);
 }
 export async function curtainControl(req, res){
-    
+    const {ctrl} = req.body;
+    if(statusData.curtainStatus == ctrl){
+        return res.status(200).json('asdf')
+    }
+    statusData.curtainStatus = ctrl;
+    return res.status(200).json(statusData.curtainStatus);
 }
 
 ///////middleware? controller?////////
 export async function getStatus(req, res){
-
-}
-
-export async function updateStatus(req, res){
-
+    return res.status(200).json(statusData);
 }
