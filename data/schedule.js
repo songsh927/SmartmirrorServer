@@ -7,7 +7,7 @@ var scheduleData = [
     },
     {
         'id' : '2',
-        'date' : '20220320',
+        'date' : '20220331',
         'title' : '운동',
         'text' : '운동'
     },
@@ -16,6 +16,12 @@ var scheduleData = [
         'date' : '20220320',
         'title' : '여행',
         'text' : '제주도 여행'
+    },
+    {
+        'id' : '4',
+        'date' : '20220331',
+        'title' : '회의',
+        'text' : '캡스톤 회의'
     },
 ]
 
