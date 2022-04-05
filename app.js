@@ -6,6 +6,7 @@ import path from 'path';
 import cors from 'cors';
 import scheduleRouter from './router/schedule.js';
 import remoteRouter from './router/remote.js';
+import {initSocket} from './connection/socket.js';
 
 const __dirname = path.resolve();
 
@@ -31,4 +32,5 @@ app.use((error, req, res, next) => {
 })
 
 
-app.listen(3000);
+const server = app.listen(3000);
+initSocket(server);

@@ -58,7 +58,7 @@ export async function create(date, title, text){
     };
     scheduleData = [...scheduleData, schedule];
     
-    return schedule.id;
+    return schedule;
 }
 
 //update schedule

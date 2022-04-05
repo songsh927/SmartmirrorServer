@@ -1,4 +1,5 @@
 import * as scheduleRepo from '../data/schedule.js';
+import { getSocketIO } from '../connection/socket.js';
 
 //get all schedule
 export async function getSchedules(req, res){
@@ -17,8 +18,9 @@ export async function getSchedule(req, res){
 //post schedule
 export async function createSchedule(req, res) {
     const {date, title, text} = req.body;
-    const id = await scheduleRepo.create(date, title, text);
-    res.status(201).json(id);
+    const schedule = await scheduleRepo.create(date, title, text);
+    res.status(201).json(schedule);
+    getSocketIO().emit('schedules', schedule)
 }
 //update schedule
 export async function updateSchedule(req, res){
