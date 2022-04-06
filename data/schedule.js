@@ -52,9 +52,9 @@ export async function getbyId(id){
 export async function create(date, title, text){
     const schedule = {
         id: Date.now().toString(),
-        date,
-        title,
-        text
+        date : date.toString(),
+        title : title.toString(),
+        text : text.toString()
     };
     scheduleData = [...scheduleData, schedule];
     

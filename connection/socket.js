@@ -1,4 +1,5 @@
-import { Server } from "socket.io";
+import pkg from "socket.io";
+const Server = pkg;
 
 class Socket {
     constructor(server){
@@ -6,13 +7,11 @@ class Socket {
             cors:{
                 origin: '*',
             }
-        })
+        });
 
         this.io.on('connection', (socket) => {
-            console.log(socket);
-            console.log('Connected');
-        })
-    }
+        });
+    };
 };
 
 let socket;
