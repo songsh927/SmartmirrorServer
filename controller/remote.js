@@ -8,6 +8,8 @@ var statusData = {
     "tempStatus" : "off",
 }
 
+//TODO! 요청시 모듈의 상태 받아온후 처리
+
 export function tempGetStatus(req, res, next){
     return res.status(200).json(statusData.tempStatus);
 }
