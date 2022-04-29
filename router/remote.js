@@ -11,7 +11,7 @@ router.get('/', remoteController.getStatus);
 //  Get status
 router.get('/tempcontroller' , remoteController.tempGetStatus);
 //  Update stauts
-router.post('/tempcontroller' , remoteController.tempControl);
+router.post('/tempcontroller/:ctrl' , remoteController.tempControl);
 /////////////////////////////
 
 /////////////////////////////
@@ -19,7 +19,7 @@ router.post('/tempcontroller' , remoteController.tempControl);
 //  Get status
 router.get('/lightcontroller' , remoteController.lightGetStatus);
 //  Update stauts
-router.post('/lightcontroller' , remoteController.lightControl);
+router.post('/lightcontroller/:ctrl' , remoteController.lightControl);
 /////////////////////////////
 
 /////////////////////////////
@@ -27,6 +27,6 @@ router.post('/lightcontroller' , remoteController.lightControl);
 //  Get status
 router.get('/curtaincontroller' , remoteController.curtainGetStatus);
 //  Update stauts
-router.post('/curtaincontroller' , remoteController.curtainControl);
+router.post('/curtaincontroller/:ctrl' , remoteController.curtainControl);
 /////////////////////////////
 export default router;
