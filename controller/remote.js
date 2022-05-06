@@ -1,4 +1,5 @@
 import requestApi from 'request';
+import * as remoteData from '../data/remote.js';
 //get status
 //update status
 
