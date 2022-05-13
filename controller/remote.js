@@ -1,32 +1,33 @@
+import request from 'request';
 import instRequest from 'request';
 
-var lightStatus = {
-    "ctrl": "off",
-    "redValue": "",
-    "greenValue": "",
-    "blueValue": ""
-}
+// var lightStatus = {
+//     "ctrl": "off",
+//     "redValue": "",
+//     "greenValue": "",
+//     "blueValue": ""
+// }
 
-var curtainStatus = {
-    "ctrl" : "off",
-    "openTime" : "",
-    "closeTime" : ""
-}
+// var curtainStatus = {
+//     "ctrl" : "off",
+//     "openTime" : "",
+//     "closeTime" : ""
+// }
 
-var tempStatus = {
-    "ctrl" : "off",
-    "onTime" : "",
-    "offTime" : ""
-}
+// var tempStatus = {
+//     "ctrl" : "off",
+//     "onTime" : "",
+//     "offTime" : ""
+// }
 
 ///
 var instStatus = [
     {
         "inst": "lightStatus",
         "ctrl": "off",
-        "redValue": "",
-        "greenValue": "",
-        "blueValue": ""
+        "redValue": "255",
+        "greenValue": "255",
+        "blueValue": "255"
     },
     {
         "inst": "curtainStatus",
@@ -44,7 +45,7 @@ var instStatus = [
 ///
 
 //TODO! 요청시 모듈의 상태 받아온후 처리
-
+/*
 // == light == //
 export async function lightGetStatus(req, res){
     return res.status(200).json(lightStatus);
@@ -99,7 +100,7 @@ export async function tempControl(req, res){
 export async function getStatus(req, res){
     return res.status(200).json(statusData);
 }
-
+*/
 // test api //
 
 export async function testGetStatus(req, res){
@@ -111,14 +112,46 @@ export async function testGetStatus(req, res){
 export async function testController(req, res){
     const instId = req.params.inst;
     const ctrl = req.query.ctrl;
+    const redValue = req.query.redvalue;
     const inst = instStatus.find((inst) => inst.inst === instId)
     
-    inst.ctrl = ctrl
+    inst.ctrl = ctrl;
+    inst.redValue = redValue;
+    requestModuleControll(inst.inst, inst);
     
-    console.log(instStatus);
-    res.sendStatus(200)
 }
 
-function ioControll(inst){
 
+
+function requestModuleControll(inst, opts){
+    console.log(inst);
+    console.log(opts);
+    if(inst == 'lightStatus'){
+        request.post({
+            uri:'localhost:8080/remote/controller',
+            method:'POST',
+            qs:{
+                redValue: opts.redValue,
+                greenValue: opts.greenValue,
+                blueValue: opts.blueValue
+            }
+        }, function(err,httpResponse,body){}
+        )
+    }
+    // else if(inst = curtainStatus){
+    //     request.post({
+    //         uri:'localhost:8080',
+    //         method:'POST'
+    //     },function(err,httpResponse,body){
+    //         console.log(httpResponse);
+    //     })
+    // }else if(inst == tempStatus){
+    //     request.post({
+    //         uri:'localhost:8080',
+    //         method:'POST'
+    //     },function(err,httpResponse,body){
+    //         console.log(httpResponse);
+    //     })
+    // }
+    
 }

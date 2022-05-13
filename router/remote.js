@@ -4,7 +4,7 @@ import * as remoteController from '../controller/remote.js';
 
 
 const router = express.Router();
-
+/*
 router.get('/', remoteController.getStatus);
 /////////////////////////////
 //  tempremote controller  //
@@ -30,7 +30,7 @@ router.get('/curtaincontroller' , remoteController.curtainGetStatus);
 router.post('/curtaincontroller' , remoteController.curtainControl);
 /////////////////////////////
 
-
+*/
 // test api //
 
 router.get('/status/:inst', remoteController.testGetStatus);
