@@ -1,5 +1,6 @@
 import request from 'request';
-import instRequest from 'request';
+import 'request-promise-native';
+import 'express-async-errors';
 
 // var lightStatus = {
 //     "ctrl": "off",
@@ -25,9 +26,9 @@ var instStatus = [
     {
         "inst": "lightStatus",
         "ctrl": "off",
-        "redValue": "255",
-        "greenValue": "255",
-        "blueValue": "255"
+        "redValue": "",
+        "greenValue": "",
+        "blueValue": ""
     },
     {
         "inst": "curtainStatus",
@@ -111,47 +112,82 @@ export async function testGetStatus(req, res){
 
 export async function testController(req, res){
     const instId = req.params.inst;
-    const ctrl = req.query.ctrl;
-    const redValue = req.query.redvalue;
+    
     const inst = instStatus.find((inst) => inst.inst === instId)
+    //if()
     
     inst.ctrl = ctrl;
-    inst.redValue = redValue;
-    requestModuleControll(inst.inst, inst);
+    const ctrl = req.query.ctrl;
+    
+    if(await requestModuleControll(inst.inst, inst) == true){
+        console.log('req')
+        res.sendStatus(200);
+    }else{
+        console.error(err);
+        res.sendStatus(500);
+    }
+    
+    
     
 }
 
 
 
-function requestModuleControll(inst, opts){
-    console.log(inst);
-    console.log(opts);
+async function requestModuleControll(inst, opts){
+    return new Promise(function(resolve, reject){
+        const uri = 'http://localhost:8080/remote/controller/' + inst;
+
     if(inst == 'lightStatus'){
         request.post({
-            uri:'localhost:8080/remote/controller',
-            method:'POST',
+            uri: uri,
             qs:{
+                ctrl: opts.ctrl,
                 redValue: opts.redValue,
                 greenValue: opts.greenValue,
                 blueValue: opts.blueValue
+            },
+        },
+        function(error, httpResponse, body){
+            if(!error && httpResponse.statusCode == 200){
+                resolve(true);
+            }else{
+                reject(err);
             }
-        }, function(err,httpResponse,body){}
+        }
         )
     }
-    // else if(inst = curtainStatus){
-    //     request.post({
-    //         uri:'localhost:8080',
-    //         method:'POST'
-    //     },function(err,httpResponse,body){
-    //         console.log(httpResponse);
-    //     })
-    // }else if(inst == tempStatus){
-    //     request.post({
-    //         uri:'localhost:8080',
-    //         method:'POST'
-    //     },function(err,httpResponse,body){
-    //         console.log(httpResponse);
-    //     })
-    // }
-    
+    else if(inst = curtainStatus){
+        request.post({
+            uri: uri,
+            qs:{
+                ctrl: opts.ctrl,
+                onTime: opts.onTime,
+                offTime: opts.offTime
+            }
+        },
+        function(error, httpResponse, body){
+            if(!error && httpResponse.statusCode == 200){
+                resolve(true);
+            }else{
+                reject(err);
+            }
+        })
+    }else if(inst == tempStatus){
+        request.post({
+            uri: uri,
+            qs: {
+                ctrl: opts.ctrl,
+                onTime: opts.onTime,
+                offTime: opts.offTime,
+                temp: opts.temp
+            }
+        },function(error, httpResponse, body){
+            if(!error && httpResponse.statusCode == 200){
+                resolve(true);
+            }else{
+                reject(err);
+            }
+        })
+    }
+    })    
 }
