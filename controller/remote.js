@@ -106,21 +106,23 @@ export async function getStatus(req, res){
 
 export async function testGetStatus(req, res){
     const inst = req.params.inst;
+    const uri = 'http://localhost:8080/remote/status/' + inst
     console.log(inst);
+    request(uri, function(err, res, body){
+        console.log(body);
+    })
     res.sendStatus(200);
 }
 
 export async function testController(req, res){
     const instId = req.params.inst;
-    
-    const inst = instStatus.find((inst) => inst.inst === instId)
-    //if()
+    const ctrl = req.query.ctrl;
+    const inst = instStatus.find((inst) => inst.inst === instId);
     
     inst.ctrl = ctrl;
-    const ctrl = req.query.ctrl;
+    
     
     if(await requestModuleControll(inst.inst, inst) == true){
-        console.log('req')
         res.sendStatus(200);
     }else{
         console.error(err);
@@ -156,7 +158,7 @@ async function requestModuleControll(inst, opts){
         }
         )
     }
-    else if(inst = curtainStatus){
+    else if(inst = 'curtainStatus'){
         request.post({
             uri: uri,
             qs:{
@@ -172,7 +174,7 @@ async function requestModuleControll(inst, opts){
                 reject(err);
             }
         })
-    }else if(inst == tempStatus){
+    }else if(inst == 'tempStatus'){
         request.post({
             uri: uri,
             qs: {
