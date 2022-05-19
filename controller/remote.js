@@ -104,9 +104,15 @@ export async function getStatus(req, res){
 */
 // test api //
 
+
+/*
+상태 확인(GET)요청
+요청형태
+http://192.168.0.X/remote/status/lightStatus
+*/
 export async function testGetStatus(req, res){
     const inst = req.params.inst;
-    const uri = 'http://localhost:8080/remote/status/' + inst
+    const uri = 'http://localhost:8080/remote/status/' + inst   //모듈쪽 주소로 변경
     console.log(inst);
     request(uri, function(err, res, body){
         console.log(body);
@@ -119,7 +125,7 @@ export async function testController(req, res){
     const ctrl = req.query.ctrl;
     const inst = instStatus.find((inst) => inst.inst === instId);
     
-    inst.ctrl = ctrl;
+    //inst.ctrl = ctrl;
     
     
     if(await requestModuleControll(inst.inst, inst) == true){
@@ -134,10 +140,13 @@ export async function testController(req, res){
 }
 
 
-
-async function requestModuleControll(inst, opts){
+/*
+상태 변경(POST)
+http://192.168.0.X/remote/controller/lightStatus?ctrl=on&redvalue=200&greenvalue=200&bluevalue=200
+*/
+async function requestModuleControll(inst, opts){  
     return new Promise(function(resolve, reject){
-        const uri = 'http://localhost:8080/remote/controller/' + inst;
+        const uri = 'http://localhost:8080/remote/controller/' + inst;  //모듈쪽 주소로 변경
 
     if(inst == 'lightStatus'){
         request.post({
