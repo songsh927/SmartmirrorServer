@@ -26,9 +26,18 @@ export async function curtainGetStatus(req, res){
 
 export async function curtainControl(req, res){
     const {ctrl, onTime, offTime} = req.body;
-    requestModuleController('curtaincontroller', {ctrl, onTime, offTime}).then((body) => {
-        res.status(200).json(body)
-    })
+
+    if({onTime, offTime} !== null){
+        requestTimeControll().then((body) => {
+            res.status(200).json(body);
+        })
+    }else{
+        requestModuleController('curtaincontroller', ctrl).then((body) => {
+            res.status(200).json(body)
+        })
+    }
+
+    
 }
 
 // == temp == // 
@@ -39,10 +48,21 @@ export function tempGetStatus(req, res, next){
 }
 
 export async function tempControl(req, res){
-    const {ctrl, onTime, offTime, temp} = req.body;
-    requestModuleController('tempcontroller', {ctrl, onTime, offTime, temp}).then((body) => {
-        res.status(200).json(body)
-    })
+    const {ctrl, onTime, offTime} = req.body;
+
+    if({onTime, offTime} !== null){
+
+        requestTimeControll().then((body) => {
+            res.status(200).json(body);
+        })
+        
+    }else{
+        requestModuleController('tempcontroller', ctrl).then((body) => {
+            res.status(200).json(body);
+        })
+    }
+
+    
 }
 
 
@@ -83,5 +103,14 @@ async function requestModuleGetStatus(inst){
                 reject(error);
             }
         })
+    })
+}
+
+async function requestTimeControll(inst,onTime, offTime){
+    
+    var ctrl;
+    
+    requestModuleController(inst, ctrl).then((body) => {
+        res.status(200).json(body);
     })
 }
