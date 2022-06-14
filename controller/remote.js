@@ -25,10 +25,10 @@ export async function curtainGetStatus(req, res){
 }
 
 export async function curtainControl(req, res){
-    const {ctrl, onTime, offTime} = req.body;
+    const {ctrl, onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} = req.body;
 
-    if({onTime, offTime} !== null){
-        requestTimeControll().then((body) => {
+    if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
+        requestTimeControll('curtaincontroller', {onTimeHour, onTimeMinute, offTimeHour, offTimeMinute}).then((body) => {
             res.status(200).json(body);
         })
     }else{
@@ -106,11 +106,19 @@ async function requestModuleGetStatus(inst){
     })
 }
 
-async function requestTimeControll(inst,onTime, offTime){
+async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, offTimeMinute){
     
     var ctrl;
+    var now = new Date();
+    var nowHour = now.getHours();
+    var nowMinute = now.getMinutes();
+    var sleepUntilonTime = ((onTimeHour - nowHour)*3600 + (onTimeMinute - nowMinute)*60)*1000;
+    var sleepTime =  ((offTimeHour - onTimeHour)*3600 + (offTimeMinute - onTimeMinute)*60)*1000;
+
+    setTimeout(() => requestModuleController(inst, 'on'), 3000);
+    setTimeout(() => requestModuleController(inst, 'off'), 3000);
     
-    requestModuleController(inst, ctrl).then((body) => {
-        res.status(200).json(body);
-    })
+    // requestModuleController(inst, ctrl).then((body) => {
+    //     res.status(200).json(body);
+    // })
 }
