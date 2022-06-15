@@ -28,7 +28,7 @@ export async function curtainControl(req, res){
     const {ctrl, onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} = req.body;
 
     if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
-        requestTimeControll('curtaincontroller', {onTimeHour, onTimeMinute, offTimeHour, offTimeMinute}).then((body) => {
+        requestTimeControll('curtaincontroller', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
             res.status(200).json(body);
         })
     }else{
@@ -50,15 +50,13 @@ export function tempGetStatus(req, res, next){
 export async function tempControl(req, res){
     const {ctrl, onTime, offTime} = req.body;
 
-    if({onTime, offTime} !== null){
-
-        requestTimeControll().then((body) => {
+    if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
+        requestTimeControll('tempcontroller', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
             res.status(200).json(body);
         })
-        
     }else{
         requestModuleController('tempcontroller', ctrl).then((body) => {
-            res.status(200).json(body);
+            res.status(200).json(body)
         })
     }
 
@@ -66,13 +64,9 @@ export async function tempControl(req, res){
 }
 
 
-export async function getStatus(req, res){
-    return res.status(200).json(statusData);
-}
 
+async function requestModuleController(inst, opts){   
 
-async function requestModuleController(inst, opts){
-    console.log(opts);
     return new Promise((resolve, reject) => {
         request.post({
             uri: 'http://localhost:8080/remote/'+inst,
@@ -82,7 +76,6 @@ async function requestModuleController(inst, opts){
         (error, httpResponse, body) => {
             if(!error && httpResponse.statusCode == 200){
                 resolve(body);
-                console.log(body);
             }else{
                 reject(error);
             }
@@ -108,17 +101,22 @@ async function requestModuleGetStatus(inst){
 
 async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, offTimeMinute){
     
-    var ctrl;
     var now = new Date();
     var nowHour = now.getHours();
     var nowMinute = now.getMinutes();
     var sleepUntilonTime = ((onTimeHour - nowHour)*3600 + (onTimeMinute - nowMinute)*60)*1000;
     var sleepTime =  ((offTimeHour - onTimeHour)*3600 + (offTimeMinute - onTimeMinute)*60)*1000;
 
-    setTimeout(() => requestModuleController(inst, 'on'), 3000);
-    setTimeout(() => requestModuleController(inst, 'off'), 3000);
-    
-    // requestModuleController(inst, ctrl).then((body) => {
-    //     res.status(200).json(body);
-    // })
+    console.log(onTimeHour)
+    console.log(onTimeMinute)
+
+    return new Promise((resolve, reject) => {
+        setTimeout(() => requestModuleController(inst, {"ctrl":"on"}).then((body) => {
+            if(body.ctrl == "on"){
+                setTimeout(() => requestModuleController(inst, {"ctrl":"off"}).then((body) => {
+                    return resolve(body)
+                }), sleepTime)
+            }
+        }), sleepUntilonTime);
+    })
 }
