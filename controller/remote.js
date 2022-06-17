@@ -104,11 +104,9 @@ async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, o
     var now = new Date();
     var nowHour = now.getHours();
     var nowMinute = now.getMinutes();
-    var sleepUntilonTime = ((onTimeHour - nowHour)*3600 + (onTimeMinute - nowMinute)*60)*1000;
+    var nowSec = now.getSeconds();
+    var sleepUntilonTime = (((onTimeHour - nowHour)*3600 + (onTimeMinute - nowMinute)*60) - nowSec)*1000;
     var sleepTime =  ((offTimeHour - onTimeHour)*3600 + (offTimeMinute - onTimeMinute)*60)*1000;
-
-    console.log(onTimeHour)
-    console.log(onTimeMinute)
 
     return new Promise((resolve, reject) => {
         setTimeout(() => requestModuleController(inst, {"ctrl":"on"}).then((body) => {

@@ -5,7 +5,7 @@ import * as remoteController from '../controller/remote.js';
 
 const router = express.Router();
 
-router.get('/', remoteController.getStatus);
+//router.get('/', remoteController.getStatus);
 
 router.get('/lightcontroller' , remoteController.lightGetStatus);
 router.post('/lightcontroller' , remoteController.lightControl);
