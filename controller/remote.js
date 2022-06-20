@@ -4,14 +4,14 @@ import 'express-async-errors';
 
 // == light == //
 export async function lightGetStatus(req, res){
-    requestModuleGetStatus('lightcontroller').then((body) => {
+    requestModuleGetStatus('3').then((body) => {
         res.status(200).json(body)
     })
 }
 
 export async function lightControl(req, res){
     const {ctrl, redValue, greenValue, blueValue} = req.body;
-    requestModuleController('lightcontroller', {ctrl, redValue, greenValue, blueValue}).then((body) => {
+    requestModuleController('3', {ctrl, redValue, greenValue, blueValue}).then((body) => {
         res.status(200).json(body)
     })
 }
@@ -87,7 +87,7 @@ async function requestModuleController(inst, opts){
 async function requestModuleGetStatus(inst){
     return new Promise((resolve, reject) => {
         request({
-            uri: 'http://localhost:8080/remote/' + inst
+            uri: '192.168.0.' + inst
         },
         (error, httpResponse, body) => {
             if(httpResponse.statusCode == 200){
@@ -109,9 +109,9 @@ async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, o
     var sleepTime =  ((offTimeHour - onTimeHour)*3600 + (offTimeMinute - onTimeMinute)*60)*1000;
 
     return new Promise((resolve, reject) => {
-        setTimeout(() => requestModuleController(inst, {"ctrl":"on"}).then((body) => {
+        setTimeout(() => requestModuleController(inst, {"ctrl":"1"}).then((body) => {
             if(body.ctrl == "on"){
-                setTimeout(() => requestModuleController(inst, {"ctrl":"off"}).then((body) => {
+                setTimeout(() => requestModuleController(inst, {"ctrl":"0"}).then((body) => {
                     return resolve(body)
                 }), sleepTime)
             }
