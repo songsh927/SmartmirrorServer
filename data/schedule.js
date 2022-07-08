@@ -1,29 +1,4 @@
-var scheduleData = [
-    {
-        'id' : '1',
-        'date' : '20220319',
-        'title' : '회의',
-        'text' : '캡스톤 회의'
-    },
-    {
-        'id' : '2',
-        'date' : '20220331',
-        'title' : '운동',
-        'text' : '운동'
-    },
-    {
-        'id' : '3',
-        'date' : '20220320',
-        'title' : '여행',
-        'text' : '제주도 여행'
-    },
-    {
-        'id' : '4',
-        'date' : '20220331',
-        'title' : '회의',
-        'text' : '캡스톤 회의'
-    },
-]
+var scheduleData = [];
 
 //get all
 export async function getAll(){

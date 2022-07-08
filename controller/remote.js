@@ -19,7 +19,7 @@ export async function lightControl(req, res){
 
 // == curtain== //
 export async function curtainGetStatus(req, res){
-    requestModuleGetStatus('curtaincontroller').then((body) => {
+    requestModuleGetStatus('3').then((body) => {
         res.status(200).json(body)
     })
 }
@@ -59,8 +59,20 @@ export async function tempControl(req, res){
             res.status(200).json(body)
         })
     }
+}
 
-    
+export function getStatus(req, res){
+    const tempStatus = tempGetStatus();
+    const lightStatus = lightGetStatus();
+    const curtainStatus = curtainGetStatus();
+
+    const data = {
+        'lightStatus' : lightStatus,
+        'tempStatus' : tempStatus,
+        'curtainStatus' : curtainStatus
+    }
+
+    res.status(200).json(data)
 }
 
 
@@ -69,7 +81,7 @@ async function requestModuleController(inst, opts){
 
     return new Promise((resolve, reject) => {
         request.post({
-            uri: 'http://localhost:8080/remote/'+inst,
+            uri: '192.168.0.'+inst,
             body:opts,
             json: true
         },
@@ -110,7 +122,7 @@ async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, o
 
     return new Promise((resolve, reject) => {
         setTimeout(() => requestModuleController(inst, {"ctrl":"1"}).then((body) => {
-            if(body.ctrl == "on"){
+            if(body.statusCode == 200){
                 setTimeout(() => requestModuleController(inst, {"ctrl":"0"}).then((body) => {
                     return resolve(body)
                 }), sleepTime)
