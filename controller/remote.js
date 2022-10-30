@@ -1,6 +1,13 @@
 import request from 'request';
 import 'request-promise-native';
 import 'express-async-errors';
+import dayjs from 'dayjs';
+/**
+ * 조명 모듈 3
+ * 에어컨 모듈 4
+ * 커튼 모듈 5
+ * ex) 조명모듈 => 192.168.0.3
+ */
 
 // == light == //
 export async function lightGetStatus(req, res){
@@ -25,14 +32,14 @@ export async function curtainGetStatus(req, res){
 }
 
 export async function curtainControl(req, res){
-    const {ctrl, onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} = req.body;
+    const {ctrl, onTime, offTime} = req.body;
 
-    if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
-        requestTimeControll('curtaincontroller', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
+    if(onTime !== null & offTime != null){
+        requestTimeControll('5', onTime, offTime).then((body) => {
             res.status(200).json(body);
         })
     }else{
-        requestModuleController('curtaincontroller', ctrl).then((body) => {
+        requestModuleController('5', ctrl).then((body) => {
             res.status(200).json(body)
         })
     }
@@ -42,20 +49,20 @@ export async function curtainControl(req, res){
 
 // == temp == // 
 export function tempGetStatus(req, res, next){
-    requestModuleGetStatus('tempcontroller').then((body) => {
+    requestModuleGetStatus('4').then((body) => {
         res.status(200).json(body)
     })
 }
 
 export async function tempControl(req, res){
-    const {ctrl, onTime, offTime} = req.body;
+    const {ctrl, onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} = req.body;
 
     if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
-        requestTimeControll('tempcontroller', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
+        requestTimeControll('4', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
             res.status(200).json(body);
         })
     }else{
-        requestModuleController('tempcontroller', ctrl).then((body) => {
+        requestModuleController('4', ctrl).then((body) => {
             res.status(200).json(body)
         })
     }
@@ -78,6 +85,9 @@ export function getStatus(req, res){
 
 
 async function requestModuleController(inst, opts){   
+
+    console.log(inst)
+    console.log(opts)
 
     return new Promise((resolve, reject) => {
         request.post({
@@ -111,20 +121,19 @@ async function requestModuleGetStatus(inst){
     })
 }
 
-async function requestTimeControll(inst,onTimeHour, onTimeMinute, offTimeHour, offTimeMinute){
+async function requestTimeControll(inst,onTime, offTime){
     
     var now = new Date();
-    var nowHour = now.getHours();
-    var nowMinute = now.getMinutes();
-    var nowSec = now.getSeconds();
-    var sleepUntilonTime = (((onTimeHour - nowHour)*3600 + (onTimeMinute - nowMinute)*60) - nowSec)*1000;
-    var sleepTime =  ((offTimeHour - onTimeHour)*3600 + (offTimeMinute - onTimeMinute)*60)*1000;
+    var sleepUntilonTime = dayjs(dayjs(onTime)).diff(now, 'ms');
+    var sleepTime = dayjs(offTime).diff(dayjs(onTime),'ms');
 
     return new Promise((resolve, reject) => {
-        setTimeout(() => requestModuleController(inst, {"ctrl":"1"}).then((body) => {
+        setTimeout(() => requestModuleController(inst, {"ctrl":"1"})
+        .then((body) => {
             if(body.statusCode == 200){
-                setTimeout(() => requestModuleController(inst, {"ctrl":"0"}).then((body) => {
-                    return resolve(body)
+                setTimeout(() => requestModuleController(inst, {"ctrl":"0"})
+                .then((body) => {
+                    return resolve()//body)
                 }), sleepTime)
             }
         }), sleepUntilonTime);
