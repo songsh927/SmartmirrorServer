@@ -55,10 +55,10 @@ export function tempGetStatus(req, res, next){
 }
 
 export async function tempControl(req, res){
-    const {ctrl, onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} = req.body;
+    const {ctrl, onTime, offTime} = req.body;
 
-    if({onTimeHour, onTimeMinute, offTimeHour, offTimeMinute} !== null){
-        requestTimeControll('4', onTimeHour, onTimeMinute, offTimeHour, offTimeMinute).then((body) => {
+    if(onTime !== null & offTime != null){
+        requestTimeControll('4', onTime, offTime).then((body) => {
             res.status(200).json(body);
         })
     }else{
@@ -85,9 +85,6 @@ export function getStatus(req, res){
 
 
 async function requestModuleController(inst, opts){   
-
-    console.log(inst)
-    console.log(opts)
 
     return new Promise((resolve, reject) => {
         request.post({
@@ -133,7 +130,7 @@ async function requestTimeControll(inst,onTime, offTime){
             if(body.statusCode == 200){
                 setTimeout(() => requestModuleController(inst, {"ctrl":"0"})
                 .then((body) => {
-                    return resolve()//body)
+                    return resolve(body)
                 }), sleepTime)
             }
         }), sleepUntilonTime);
