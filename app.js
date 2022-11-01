@@ -7,6 +7,7 @@ import cors from 'cors';
 import scheduleRouter from './router/schedule.js';
 import remoteRouter from './router/remote.js';
 import {initSocket} from './connection/socket.js';
+import { sequelize } from './db/database.js';
 import env from 'dotenv'
 env.config();
 
@@ -34,6 +35,7 @@ app.use((error, req, res, next) => {
 })
 
 sequelize.sync().then(() => {
+    console.log('db connected')
     const server = app.listen(process.env.SERVER_PORT);
-initSocket(server);
+    initSocket(server);
 });
