@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import { sequelize } from '../db/database.js';
 
 export const Schedule = sequelize.define('schedules',{
-    id:{
+    idx:{
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
@@ -20,6 +20,9 @@ export const Schedule = sequelize.define('schedules',{
         type: Sequelize.TEXT,
         allowNull: true
     }
+},{
+    sequelize : sequelize,
+    timestamps : false
 });
 
 export async function getAll(){

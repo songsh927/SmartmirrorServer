@@ -1,18 +1,19 @@
-import * as scheduleRepo from '../data/schedule.js';
+import * as scheduleRepo from '../data/scheduleDB.js';
 import { getSocketIO } from '../connection/socket.js';
+import dayjs from 'dayjs';
 
 //get all schedule
 export async function getSchedules(req, res){
-    const date = req.query.date;
+    const date = dayjs(req.query.date).format('YYYY-MM-DD');
     const data = await (date
-        ? scheduleRepo.getbyDate(date)
+        ? scheduleRepo.getByDate(date)
         : scheduleRepo.getAll());
     res.status(200).json(data);
 }
 //get particular schedule
 export async function getSchedule(req, res){
     const id = req.params.id;
-    const data = await scheduleRepo.getbyId(id);
+    const data = await scheduleRepo.getById(id);
     res.status(200).json(data)
 }
 //post schedule
