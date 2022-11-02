@@ -37,6 +37,6 @@ export async function updateSchedule(req, res){
 export async function deleteSchedule(req, res){
     const id = req.params.id;
     
-    scheduleRepo.remove(id);
+    await scheduleRepo.remove(id);
     res.sendStatus(204);
 }

@@ -38,8 +38,8 @@ export async function getByDate(date){
     })
 }
 
-export async function getById(id){
-    return Schedule.findByPk(id);
+export async function getById(idx){
+    return Schedule.findByPk(idx);
 
 }
 
@@ -52,14 +52,14 @@ export async function create(date, title, text){
     {raw:true});
 }
 
-export async function update(id, date, title, text){
+export async function update(idx, date, title, text){
     return Schedule.update({
-        where: {id},})
+        where: {idx},})
 }
 
-export async function remove(id){
+export async function remove(idx){
     return Schedule.destroy({
-        where:{id},
+        where:{idx},
         raw:true
     })
 }
