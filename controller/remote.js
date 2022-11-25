@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 // == light == //
 export async function lightGetStatus(req, res){
     requestModuleGetStatus('3').then(() => {
-        res.status(200);
+        res.sendStatus(200);
     })
 }
 
@@ -20,7 +20,7 @@ export async function lightControl(req, res){
 
     const {ctrl, redValue, greenValue, blueValue} = req.body;
     await requestModuleController('3', {ctrl, redValue, greenValue, blueValue}).then(() => {
-        return res.status(200);
+        res.sendStatus(200);
     })
 }
 
@@ -38,11 +38,11 @@ export async function curtainControl(req, res){
     console.log('1', onTime);
     if(onTime !== null && offTime != null){
         await requestTimeControll('5', onTime, offTime).then(() => {
-            return res.status(200);
+            res.sendStatus(200);
         })
     }else{
         await requestModuleController('5', {ctrl}).then(() => {
-            return res.status(200);
+            res.sendStatus(200);
         })
     }
 
@@ -61,11 +61,11 @@ export async function tempControl(req, res){
 
     if(onTime !== null && offTime != null){
         await requestTimeControll('4', onTime, offTime).then(() => {
-            return res.status(200);
+            res.sendStatus(200);
         })
     }else{
         await requestModuleController('4', {ctrl}).then(() => {
-            return res.status(200);
+            res.sendStatus(200);
         })
     }
 }
@@ -88,14 +88,16 @@ export function getStatus(req, res){
 
 async function requestModuleController(inst, opts){   
 
-    const res = await axios({
+    await axios({
         method: 'post',
-        url:`http://192.168.0.${inst}`,
-        // url: `http://localhost:8080/remote/${inst}`,
+        // url:`http://192.168.0.${inst}`,
+        url: `http://localhost:8080/remote/${inst}`,
+        headers:{'Content-Type': 'application/json'},
         data: opts
+    }).then((res) => {
+        return res;
     });
     
-    return res;
 }
 
 async function requestModuleGetStatus(inst){
