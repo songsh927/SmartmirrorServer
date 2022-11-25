@@ -28,15 +28,14 @@ export async function lightControl(req, res){
 // == curtain== //
 export async function curtainGetStatus(req, res){
     requestModuleGetStatus('3').then(() => {
-        res.status(200);
+        res.sendStatus(200);
     })
 }
 
 export async function curtainControl(req, res){
     const {ctrl, onTime, offTime} = req.body;
 
-    console.log('1', onTime);
-    if(onTime !== null && offTime != null){
+    if(onTime !== undefined && offTime != undefined){
         await requestTimeControll('5', onTime, offTime).then(() => {
             res.sendStatus(200);
         })
@@ -52,7 +51,7 @@ export async function curtainControl(req, res){
 // == temp == // 
 export function tempGetStatus(req, res, next){
     requestModuleGetStatus('4').then(() => {
-        res.status(200);
+        res.sendStatus(200);
     })
 }
 
@@ -87,16 +86,23 @@ export function getStatus(req, res){
 
 
 async function requestModuleController(inst, opts){   
+    console.log(JSON.stringify(opts));
 
-    await axios({
-        method: 'post',
-        // url:`http://192.168.0.${inst}`,
-        url: `http://localhost:8080/remote/${inst}`,
-        headers:{'Content-Type': 'application/json'},
-        data: opts
-    }).then((res) => {
-        return res;
-    });
+    try{
+        await axios({
+            method: 'post',
+            url:`http://192.168.0.${inst}`,
+            // url: `http://localhost:8080/remote/${inst}`,
+            headers:{'Content-Type': 'application/json'},
+            data: JSON.stringify(opts)
+        }).then((res) => {
+            return res;
+        });
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+    
     
 }
 
@@ -115,12 +121,9 @@ async function requestTimeControll(inst,onTime, offTime){
     var sleepTime = dayjs(offTime).diff(dayjs(onTime),'ms');
 
     return setTimeout(async () => {
-        console.log('1')
         await requestModuleController(inst,{"ctrl": 1}).then((res) =>{
-            console.log(res);
             if(res.status == 200){
                 setTimeout(async () => {
-                    console.log('2')
                     await requestModuleController(inst,{"ctrl":0}).then((res) => {
                         return res;
                     })
