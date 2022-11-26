@@ -85,23 +85,31 @@ export function getStatus(req, res){
 
 
 
-async function requestModuleController(inst, opts){   
-    console.log(JSON.stringify(opts));
+async function requestModuleController(inst, opts){
 
     try{
         await axios({
             method: 'post',
-            url:`http://192.168.0.${inst}`,
-            // url: `http://localhost:8080/remote/${inst}`,
+            // url:`http://192.168.0.${inst}`,
+            url: `http://localhost:8080/remote/${inst}`,
             headers:{'Content-Type': 'application/json'},
+            timeout:1000,
             data: JSON.stringify(opts)
-        }).then((res) => {
-            return res;
+        }).then(() => {
+            return ;
         });
     }catch(err){
-        console.log(err);
         throw err;
     }
+
+
+    // return await axios({
+    //     method: 'post',
+    //     // url:`http://192.168.0.${inst}`,
+    //     url: `http://localhost:8080/remote/${inst}`,
+    //     headers:{'Content-Type': 'application/json'},
+    //     data: JSON.stringify(opts)
+    // })
     
     
 }
