@@ -2,6 +2,7 @@ import axios from 'axios';
 import 'request-promise-native';
 import 'express-async-errors';
 import dayjs from 'dayjs';
+import request from 'request';
 /**
  * 조명 모듈 3
  * 에어컨 모듈 4
@@ -87,30 +88,37 @@ export function getStatus(req, res){
 
 async function requestModuleController(inst, opts){
 
-    try{
-        await axios({
-            method: 'post',
-            // url:`http://192.168.0.${inst}`,
-            url: `http://localhost:8080/remote/${inst}`,
-            headers:{'Content-Type': 'application/json'},
-            timeout:1000,
-            data: JSON.stringify(opts)
-        }).then(() => {
-            return ;
-        });
-    }catch(err){
-        throw err;
+    // try{
+    //     await axios({
+    //         method: 'post',
+    //         // url:`http://192.168.0.${inst}`,
+    //         url: `http://localhost:8080/remote/${inst}`,
+    //         headers:{'Content-Type': 'application/json'},
+    //         timeout:1000,
+    //         data: JSON.stringify(opts)
+    //     }).then(() => {
+    //         return ;
+    //     });
+    // }catch(err){
+    //     throw err;
+    // }
+
+
+    const options = {
+        // uri: `http://192.168.0.${inst}`,
+        uri: `http://localhost:8080/remote/${inst}`,
+        method: 'POST',
+        body: opts,
+        json: true
     }
 
+    return request.post(options, (error, response, body) => {
+        if(!error){
+            console.log(body);
+        }
+    })
 
-    // return await axios({
-    //     method: 'post',
-    //     // url:`http://192.168.0.${inst}`,
-    //     url: `http://localhost:8080/remote/${inst}`,
-    //     headers:{'Content-Type': 'application/json'},
-    //     data: JSON.stringify(opts)
-    // })
-    
+
     
 }
 

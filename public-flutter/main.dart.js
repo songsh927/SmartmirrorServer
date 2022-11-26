@@ -60080,7 +60080,7 @@ $1(a){this.a.ae(new A.aa4(a,this.b))},
 $S:10}
 A.aa4.prototype={
 $0(){var s,r="lightcontroller",q=this.a,p=t.N,o=this.b,n=t.xl
-if(q){s=A.a9(["ctrl","1","redValue","0","greenValue","0","blueValue","0"],p,p)
+if(q){s=A.a9(["ctrl","1","redValue","150","greenValue","150","blueValue","150"],p,p)
 A.hd(o,!1,n).hR(r,s)}else{s=A.a9(["ctrl","0","redValue","0","greenValue","0","blueValue","0"],p,p)
 A.hd(o,!1,n).hR(r,s)}A.hd(o,!1,n).a=q},
 $S:0}
