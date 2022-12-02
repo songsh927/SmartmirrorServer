@@ -112,7 +112,7 @@ async function requestModuleController(inst, opts){
         json: true
     }
 
-    return request.post(options, (error, response, body) => {
+    return await request.post(options, (error, response, body) => {
         if(!error){
             console.log(body);
         }
